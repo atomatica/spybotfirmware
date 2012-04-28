@@ -56,6 +56,11 @@ void setup()
     data[i] = 0;
   }
   
+  // set default states
+  data[leftM] = 128;
+  data[rightM] = 128;
+  data[servo] = 140;
+  
   // initialize the serial communication:
   Serial.begin(9600);
   
@@ -89,25 +94,42 @@ void loop() {
 // drives the motors
 //--------------------------------------------------------------
 void drive() {
-  int rightm = data[rightM];
-  int leftm = data[leftM];
+  boolean rightd = true;
+  boolean leftd = true;
+  unsigned int rightm = data[rightM];
+  unsigned int leftm = data[leftM];
+  if (rightm == 128) {
+    rightm = 0;
+  }
+  else if (rightm < 128) {
+    rightd = false;
+    rightm = 255 - rightm;
+  }
+  
+  if (leftm == 128) {
+    leftm = 0;
+  }
+  else if (leftm < 128) {
+    leftd = false;
+    leftm = 255 - leftm;
+  }
   
   // shifting to -128, 128
-  rightm = rightm - 128;
-  leftm = leftm - 128;
+  //rightm = rightm - 128;
+  //leftm = leftm - 128;
   
   // scaling to -256 to 256
-  rightm = 2*rightm;
-  leftm = 2*leftm;
+  //rightm = 2*rightm;
+  //leftm = 2*leftm;
   
   // setting booleans
-  boolean rightd = false;
-  boolean leftd = false;
-  if (rightm > 0) rightd = true;
-  if (leftm > 0) leftd = true;
+  //boolean rightd = false;
+  //boolean leftd = false;
+  //if (rightm > 0) rightd = true;
+  //if (leftm > 0) leftd = true;
   
-  rightm = abs(rightm);
-  leftm = abs(leftm);
+  //rightm = abs(rightm);
+  //leftm = abs(leftm);
   
   // actually driving motors 
   if (rightd) digitalWrite(rightDPin, HIGH);
